@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7mhrjqfg7qgk*mk(i-&#qvu+)qxaf(j2^tb$y!#m&s8!i$55!g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['sujithts.pythonanywhere.com']
 # When DEBUG is True and ALLOWED_HOSTS is empty, the host is validated against ['localhost', '127.0.0.1', '[::1]']. This won't match our hostname on PythonAnywhere once we deploy our application so we will change the following setting:
 
 
@@ -152,4 +152,8 @@ STATIC_ROOT = BASE_DIR / 'static'  # filesystem path where `collectstatic` gathe
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 POSTS_PER_PAGE = 6
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = Path(BASE_DIR / 'media')
