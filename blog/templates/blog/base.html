@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Modern Blog{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext">
+
+    <!-- Base CSS -->
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {% block page_css %}{% endblock %}
+    {% block extra_css %}
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="{% url 'blog:post_list' %}" class="logo" style="font-family: 'Lobster';">ModernBlog</a>
+            <nav>
+                <ul class="nav-links" style="font-style: italic;">
+                    <li><a href="{% url 'blog:post_list' %}">Home</a></li>
+                    <li><a href="{% url 'blog:about' %}">About</a></li>
+
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page-specific hero/banner section -->
+    {% block hero %}
+    {% endblock %}
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer (optional) -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2023 Modern Blog. All rights reserved.</p>
+            <p>Follow us on:
+                <a href="https://twitter.com" target="_blank">Twitter</a>,
+                <a href="https://facebook.com" target="_blank">Facebook</a>,
+                <a href="https://instagram.com" target="_blank">Instagram</a>
+            </p>
+        </div>
+    </footer>
+    <!-- Base JavaScript -->
+    {% block javascript %}
+    {% endblock %}
+</body>
+
+</html>
