@@ -1,0 +1,47 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}
+{% if post %}{{ post.title }} - Modern Blog{% else %}Post Not Found - Modern Blog{% endif %}
+{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/blog_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'blog:post_list' %}{% if request.GET.from_page %}?page={{ request.GET.from_page }}{% endif %}"
+    class="back-button">
+    ← Back to Posts
+</a>
+
+{% if post %}
+<article class="article">
+    <header class="article-header">
+        <h1 class="article-title">{{ post.title }}</h1>
+        <div class="article-meta">
+            <div class="author-info">
+                <div class="author-avatar">
+                    {{ post.author.first_name|first|default:post.author.username|first|upper }}
+                </div>
+                <div class="author-details">
+                    <h4>{{ post.author.get_full_name|default:post.author.username }}</h4>
+                    <div class="publish-date">
+                        Published on {{ post.published_date|date:"F d, Y" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="article-content">
+        {{ post.text|linebreaks }}
+    </div>
+</article>
+{% else %}
+<div class="error-message">
+    <h2>Post Not Found</h2>
+    <p>Sorry, the post you're looking for doesn't exist or hasn't been published yet.</p>
+    <p>Try browsing our <a href="{% url 'blog:post_list' %}">recent articles</a>.</p>
+</div>
+{% endif %}
+{% endblock %}
