@@ -1,13 +1,42 @@
 from django.shortcuts import render
+from django.utils import timezone
+from .models import Post
+from django.core.paginator import Paginator
+from django.conf import settings
+
 
 # Create your views here.
 
 def post_list(request):
-    '''
-    Function to render the post list page.
-    Args:
-        request: The HTTP request object.
-    Returns:
-        HttpResponse: Rendered HTML page for the post list.
-    '''
-    return render(request, 'blog/post_list.html', {})
+    """
+    Retrieve published blog posts, paginate them, and render the post list template.
+    """
+    # Creates a lazy QuerySet 
+    posts_qs = (
+        Post.objects
+            .select_related('author')
+            .filter(published_date__lte=timezone.now())
+            .order_by('-published_date')
+    )
+
+    # Slices the QuerySet into pages (still lazy)
+    paginator = Paginator(posts_qs, getattr(settings, "POSTS_PER_PAGE", 5))
+    # Gets the page number from the request, defaults to 1
+    page = request.GET.get('page', 1)
+    posts = paginator.get_page(page) 
+    # Template receives already-fetched data
+    return render(request, 'blog/post_list.html', {'page_obj': posts})
+
+def post_detail(request, pk):
+    """
+    Display a single blog post.
+    """
+    post = Post.objects.filter(pk=pk, published_date__lte=timezone.now()).first()
+    status = 404 if not post else 200
+    return render(request, 'blog/post_detail.html', {'post': post}, status=status)
+
+def about(request):
+    """
+    Render the about page.
+    """
+    return render(request, 'blog/about.html')
