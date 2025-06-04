@@ -1,35 +1,144 @@
-<!DOCTYPE html>
-<html>
+{% extends 'blog/base.html' %}
+{% load static %}
 
-<head>
-    <title>Django Girls Blog</title>
-</head>
+{% block title %}Modern Blog{% endblock %}
 
-<body>
-    <h1>Welcome to Django Girls Blog</h1>
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/blog_list.css' %}">
+{% endblock %}
 
-    <p>This is a simple blog page created with Django. We're glad to have you here!</p>
+{% block hero %}
+<!-- Hero Section -->
+<section class="hero">
+    <h1 style="font-family: 'Lobster';">Welcome to Our Blog</h1>
+    <p style="font-style: italic;">Discover amazing stories, insights, and ideas from our community of writers</p>
+</section>
+{% endblock %}
 
-    <h2>Latest Posts</h2>
-
-    <article>
-        <h3>Getting Started with Django</h3>
-        <p>Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design. In
-            this post, we’ll go through how to set up your first Django project.</p>
+{% block content %}
+{% if page_obj.object_list %}
+<div class="posts-grid">
+    {% for post in page_obj.object_list %}
+    <article class="post-card">
+        <div class="post-header">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <div class="post-meta">
+                <div class="author-info">
+                    <div class="author-avatar">
+                        {{ post.author.first_name|first|default:post.author.username|first|upper }}
+                    </div>
+                    <span>{{ post.author.get_full_name|default:post.author.username }}</span>
+                </div>
+                <span>•</span>
+                <time datetime="{{ post.published_date|date:'c' }}">
+                    {{ post.published_date|date:"M d, Y" }}
+                </time>
+            </div>
+        </div>
+        <div class="post-content">
+            <p class="post-excerpt">
+                {{ post.text|truncatewords:30 }}
+            </p>
+            <a href="{% url 'blog:post_detail' post.pk %}?from_page={{ page_obj.number }}" class="read-more">
+                Read More →
+            </a>
+        </div>
     </article>
+    {% endfor %}
+</div>
 
-    <article>
-        <h3>Why Learn Web Development?</h3>
-        <p>Web development is a valuable skill that opens up opportunities in various industries. It allows you to build
-            your own websites, understand how the internet works, and even launch your own projects!</p>
-    </article>
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="pagination-container">
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page=1" title="First">⟪</a>
+        <a href="?page={{ page_obj.previous_page_number }}" title="Previous">⟨</a>
+        {% else %}
+        <span class="disabled">⟪</span>
+        <span class="disabled">⟨</span>
+        {% endif %}
 
-    <article>
-        <h3>Meet the Django Girls Team</h3>
-        <p>We’re a group of volunteers passionate about making technology accessible to everyone. Learn more about our
-            mission and how you can get involved.</p>
-    </article>
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <span class="current">{{ num }}</span>
+        {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %} <a href="?page={{ num }}">
+            {{ num}}</a>
+            {% endif %}
+            {% endfor %}
 
-</body>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" title="Next">⟩</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="Last">⟫</a>
+            {% else %}
+            <span class="disabled">⟩</span>
+            <span class="disabled">⟫</span>
+            {% endif %}
+    </div>
+</div>
+{% endif %}
+{% else %}
+<!-- Empty State -->
+<div class="empty-state">
+    <div class="empty-state-icon">📝</div>
+    <h3>No Posts Yet</h3>
+    <p>Be the first to publish a blog post!</p>
+</div>
+{% endif %}
+{% endblock %}
 
-</html>
+{% block javascript %}
+<script>
+    // Add smooth scrolling and enhanced interactions
+    document.addEventListener('DOMContentLoaded', function () {
+        // Smooth scroll for pagination links
+        const paginationLinks = document.querySelectorAll('.pagination a');
+        paginationLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                // Add loading state
+                this.classList.add('loading');
+            });
+        });
+
+        // Add click handlers for post cards to navigate to detail page
+        const postCards = document.querySelectorAll('.post-card');
+        postCards.forEach(card => {
+            card.addEventListener('click', function (e) {
+                // Only navigate if the click isn't on the read more link
+                if (!e.target.classList.contains('read-more') && !e.target.closest('.read-more')) {
+                    const readMoreLink = this.querySelector('.read-more');
+                    if (readMoreLink) {
+                        window.location.href = readMoreLink.href;
+                    }
+                }
+            });
+
+            // Add cursor pointer style
+            card.style.cursor = 'pointer';
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe post cards for scroll animations
+        postCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+    });
+</script>
+{% endblock %}
