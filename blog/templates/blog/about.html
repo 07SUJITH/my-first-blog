@@ -1,0 +1,421 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}About Us - Modern Blog{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/blog_detail.css' %}">
+{% endblock %}
+{% block hero %}
+<section class="hero about-hero">
+    <h1 style="font-family: 'Lobster';">About Modern Blog</h1>
+    <p style="font-style: italic;">Connecting minds through powerful storytelling</p>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="about-content">
+    <!-- Introduction Section -->
+    <section class="intro-section">
+        <div class="intro-text">
+            <h2>Welcome to Our Story</h2>
+            <p>Modern Blog was born from a simple belief: everyone has a story worth telling. What started as a small
+                passion project has grown into a vibrant community where writers, thinkers, and dreamers come together
+                to share their unique perspectives with the world.</p>
+
+            <p>We're more than just a blogging platform – we're a space where ideas flourish, conversations spark, and
+                connections are made. Whether you're here to discover thought-provoking articles, share your own
+                insights, or simply find inspiration, you've found your digital home.</p>
+        </div>
+        <div class="intro-image">
+            <div class="placeholder-image">
+                <span>📖</span>
+                <p>Stories Come to Life</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <h2>Our Mission</h2>
+        <div class="mission-cards">
+            <div class="mission-card">
+                <div class="mission-icon">✍️</div>
+                <h3>Empower Voices</h3>
+                <p>We believe every voice matters. Our platform provides writers with the tools and audience they need
+                    to share their stories authentically.</p>
+            </div>
+            <div class="mission-card">
+                <div class="mission-icon">🌟</div>
+                <h3>Inspire Growth</h3>
+                <p>Through diverse perspectives and meaningful content, we aim to inspire personal growth and broaden
+                    understanding across communities.</p>
+            </div>
+            <div class="mission-card">
+                <div class="mission-icon">🤝</div>
+                <h3>Build Community</h3>
+                <p>We foster a supportive environment where readers and writers can connect, engage, and learn from one
+                    another.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <h2>What We Stand For</h2>
+        <div class="values-list">
+            <div class="value-item">
+                <h4>Authenticity</h4>
+                <p>We encourage genuine, honest storytelling that reflects real experiences and perspectives.</p>
+            </div>
+            <div class="value-item">
+                <h4>Diversity</h4>
+                <p>Our platform celebrates diverse voices, backgrounds, and viewpoints from around the globe.</p>
+            </div>
+            <div class="value-item">
+                <h4>Quality</h4>
+                <p>We're committed to maintaining high standards for content while supporting writers in their craft.
+                </p>
+            </div>
+            <div class="value-item">
+                <h4>Community</h4>
+                <p>We believe in the power of connection and strive to create meaningful interactions between our users.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <h2>Meet the Team</h2>
+        <p class="team-intro">Behind Modern Blog is a passionate team of writers, developers, and storytelling
+            enthusiasts who work tirelessly to make this platform the best it can be.</p>
+
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="member-avatar">JD</div>
+                <h4>Jane Doe</h4>
+                <p class="member-role">Founder & Editor-in-Chief</p>
+                <p class="member-bio">A passionate storyteller with 10+ years in digital publishing, Jane founded Modern
+                    Blog to create a space where authentic voices can thrive.</p>
+            </div>
+            <div class="team-member">
+                <div class="member-avatar">MS</div>
+                <h4>Mike Smith</h4>
+                <p class="member-role">Technical Lead</p>
+                <p class="member-bio">Mike ensures our platform runs smoothly and continues to evolve with the latest
+                    technologies to serve our growing community.</p>
+            </div>
+            <div class="team-member">
+                <div class="member-avatar">SJ</div>
+                <h4>Sarah Johnson</h4>
+                <p class="member-role">Community Manager</p>
+                <p class="member-bio">Sarah nurtures our writer community, helping new voices find their audience and
+                    fostering meaningful connections.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA Section -->
+    <section class="cta-section">
+        <h2>Join Our Journey</h2>
+        <p>Ready to be part of our story? Whether you're a seasoned writer or just getting started, we'd love to have
+            you in our community.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'blog:post_list' %}" class="btn btn-primary">Start Reading</a>
+
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* About Page Specific Styles */
+    .about-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-align: center;
+        padding: 80px 20px;
+        margin-bottom: 40px;
+    }
+
+    .about-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .about-hero p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .about-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .intro-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+        margin-bottom: 60px;
+        align-items: center;
+    }
+
+    .intro-text h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 2.2rem;
+    }
+
+    .intro-text p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .placeholder-image {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        border: 2px dashed #dee2e6;
+    }
+
+    .placeholder-image span {
+        font-size: 4rem;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .placeholder-image p {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .mission-section {
+        margin-bottom: 60px;
+    }
+
+    .mission-section h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        font-size: 2.2rem;
+        color: #333;
+    }
+
+    .mission-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    .mission-card {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .mission-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .mission-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .mission-card h3 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .mission-card p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .values-section {
+        margin-bottom: 60px;
+        background: #f8f9fa;
+        padding: 50px 30px;
+        border-radius: 12px;
+    }
+
+    .values-section h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #333;
+        font-size: 2.2rem;
+    }
+
+    .values-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+
+    .value-item h4 {
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+
+    .value-item p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .team-section {
+        margin-bottom: 60px;
+    }
+
+    .team-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 2.2rem;
+    }
+
+    .team-intro {
+        text-align: center;
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .team-member {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .member-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #667eea;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0 auto 20px;
+    }
+
+    .team-member h4 {
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .member-role {
+        color: #667eea;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .member-bio {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    .cta-section {
+        text-align: center;
+        padding: 50px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 12px;
+        margin-bottom: 40px;
+    }
+
+    .cta-section h2 {
+        margin-bottom: 20px;
+        font-size: 2.2rem;
+    }
+
+    .cta-section p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: white;
+        color: #667eea;
+    }
+
+    .btn-primary:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+    }
+
+    .btn-secondary:hover {
+        background: white;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .intro-section {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .about-hero h1 {
+            font-size: 2.2rem;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 200px;
+        }
+    }
+</style>
+{% endblock %}
