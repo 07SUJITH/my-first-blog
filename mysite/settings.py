@@ -157,3 +157,6 @@ POSTS_PER_PAGE = 6
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = Path(BASE_DIR / 'media')
+
+# so that when the login page is accessed directly, it will redirect a successful login to the top-level index (the homepage of our blog).
+LOGIN_REDIRECT_URL = '/' 
