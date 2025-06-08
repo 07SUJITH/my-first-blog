@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Post
 from django.core.paginator import Paginator
@@ -41,7 +42,12 @@ def about(request):
     """
     return render(request, 'blog/about.html')
 
+@login_required
 def post_new(request):
+    '''
+    Create a new blog post.
+    login_required decorator is used in post_new view function to ensure that only authenticated users can create new blog posts.if the user is not logged in, they will be redirected to the login page.
+    '''
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -53,7 +59,14 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
+
+
+@login_required
 def post_edit(request, pk):
+    '''
+    Edit an existing blog post.
+    login_required decorator is used in post_edit view function to ensure that only authenticated users can edit existing blog posts.if the user is not logged in, they will be redirected to the login page.
+    '''
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
@@ -66,9 +79,11 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
 
+@login_required
 def post_draft_list(request):
     """
     Retrieve draft blog posts, paginate them, and render the post list template.
+    login_required decorator ensures that only authenticated users can access this view.
     """
     # Creates a lazy QuerySet 
     posts_qs = (
@@ -86,9 +101,11 @@ def post_draft_list(request):
     # Template receives already-fetched data
     return render(request, 'blog/post_draft_list.html', {'page_obj': posts})
 
+@login_required
 def post_publish(request, pk):
     """
     Publish a draft blog post.
+    login_required decorator ensures that only authenticated users can access this view.
     """
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -97,9 +114,11 @@ def post_publish(request, pk):
         post.publish()
     return redirect('blog:post_detail', pk=pk)
 
+@login_required
 def post_remove(request, pk):
     """
     Remove a blog post.
+    login_required decorator ensures that only authenticated users can access this view.
     """
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
