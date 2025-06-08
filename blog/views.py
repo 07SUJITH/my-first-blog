@@ -31,7 +31,7 @@ def post_detail(request, pk):
     """
     Display a single blog post.
     """
-    post = Post.objects.filter(pk=pk, published_date__lte=timezone.now()).first()
+    post = Post.objects.filter(pk=pk).first()
     status = 404 if not post else 200
     return render(request, 'blog/post_detail.html', {'post': post}, status=status)
 
@@ -47,7 +47,6 @@ def post_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.published_date = timezone.now()
             post.save()
             return redirect('blog:post_detail', pk=post.pk)
     else:
@@ -60,10 +59,50 @@ def post_edit(request, pk):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
-            post.auther = request.user
-            post.published_date = timezone.now()
+            post.author = request.user
             post.save()
-            return redirect('blog:post_detail',pk=post.pk)
+            return redirect('blog:post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
+def post_draft_list(request):
+    """
+    Retrieve draft blog posts, paginate them, and render the post list template.
+    """
+    # Creates a lazy QuerySet 
+    posts_qs = (
+        Post.objects
+            .select_related('author')
+            .filter(published_date__isnull=True)
+            .order_by('-created_date')
+    )
+
+    # Slices the QuerySet into pages (still lazy)
+    paginator = Paginator(posts_qs, getattr(settings, "POSTS_PER_PAGE", 5))
+    # Gets the page number from the request, defaults to 1
+    page = request.GET.get('page', 1)
+    posts = paginator.get_page(page) 
+    # Template receives already-fetched data
+    return render(request, 'blog/post_draft_list.html', {'page_obj': posts})
+
+def post_publish(request, pk):
+    """
+    Publish a draft blog post.
+    """
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        # Only allow publishing via POST requests to prevent unintended access via URL.
+        # This avoids republishing drafts or altering the publish date by direct GET access.    
+        post.publish()
+    return redirect('blog:post_detail', pk=pk)
+
+def post_remove(request, pk):
+    """
+    Remove a blog post.
+    """
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        # Only allow removal via POST requests to prevent unintended access via URL.
+        post.delete()
+    return redirect('blog:post_list') 
