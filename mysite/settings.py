@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',  # Custom app for blog functionality
+    'accounts',  # Custom app for user accounts and authentication
 ]
 
 MIDDLEWARE = [
