@@ -42,6 +42,7 @@
     <div class="edit-form-section">
         <div class="form-container">
             <form method="POST" class="post-form">
+                <!-- here we didnt add the action attribute since it will submit to the same URL and handled by the same view function -->
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -93,7 +94,7 @@
                             stroke-width="2">
                             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                         </svg>
-                        {% if form.instance.pk %}Update Post{% else %}Publish Post{% endif %}
+                        {% if form.instance.pk %}Update Post{% else %}Submit Post{% endif %}
                     </button>
                 </div>
             </form>
