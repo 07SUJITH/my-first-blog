@@ -1,0 +1,103 @@
+{% extends "blog/base.html" %}
+
+{% load static %}
+
+{% block title %}Login - Modern Blog{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/auth.css' %}">
+{% endblock %}
+
+{% block hero %}
+<section class="auth-hero">
+    <div class="auth-hero-content">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your account to continue</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Sign In</h2>
+            <p>Enter your credentials to access your account</p>
+        </div>
+
+        {% if form.errors %}
+        <div class="error-message">
+            <div class="error-icon">⚠️</div>
+            <div class="error-text">
+                <strong>Authentication Failed</strong>
+                <p>Your username and password didn't match. Please try again.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'accounts:login' %}" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label">
+                    {{ form.username.label }}
+                </label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    {{ form.username }}
+                </div>
+                {% if form.username.errors %}
+                <div class="field-error">
+                    {{ form.username.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}" class="form-label">
+                    {{ form.password.label }}
+                </label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <circle cx="12" cy="16" r="1"></circle>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    {{ form.password }}
+                </div>
+                {% if form.password.errors %}
+                <div class="field-error">
+                    {{ form.password.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <span>Sign In</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4m-5-4l4-4-4-4m5 4H3"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+
+        <div class="auth-footer">
+            <!-- TODO: Add links for sign up and password recovery -->
+            <p>Don't have an account? <a href="#" class="auth-link">Sign up here</a></p>
+            <p><a href="#" class="auth-link">Forgot your password?</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
