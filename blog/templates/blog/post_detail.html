@@ -10,10 +10,19 @@
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'blog:post_list' %}{% if request.GET.from_page %}?page={{ request.GET.from_page }}{% endif %}"
+{% if post.published_date %}
+<a style="margin-top: 10px;"
+    href="{% url 'blog:post_list' %}{% if request.GET.from_page %}?page={{ request.GET.from_page }}{% endif %}"
     class="back-button">
     ← Back to Posts
 </a>
+{% else %}
+<a style="margin-top: 10px;"
+    href="{% url 'blog:post_draft_list' %}{% if request.GET.from_page %}?page={{ request.GET.from_page }}{% endif %}"
+    class="back-button">
+    ← Back to Drafts
+</a>
+{% endif %}
 
 {% if post %}
 <article class="article">
@@ -26,9 +35,17 @@
                 </div>
                 <div class="author-details">
                     <h4>{{ post.author.get_full_name|default:post.author.username }}</h4>
+                    {% if post.published_date %}
                     <div class="publish-date">
                         Published on {{ post.published_date|date:"F d, Y" }}
                     </div>
+                    {% else %}
+                    <div class="publish-date">
+                        Created at {{ post.created_date|date:"F d, Y" }}
+                    </div>
+
+                    {% endif %}
+
                 </div>
             </div>
             <aside class="actions">
@@ -36,6 +53,15 @@
                 <a class="btn btn-secondary" href="{% url 'blog:post_edit' pk=post.pk %}">
                     {% include './icons/pencil-fill.svg' %}
                 </a>
+
+                {% if post.published_date == None %}
+                <form method="POST" action="{% url 'blog:post_publish' pk=post.pk %}" class="post-form">{% csrf_token %}
+                    <button type="submit" class="submit-btn submit-btn-secondary" name="publish">Publish</button>
+                </form>
+                {% endif %}
+                <form method="POST" action="{% url 'blog:post_remove' pk=post.pk %}" class="post-form">{% csrf_token %}
+                    <button type="submit" class="submit-btn btn-danger" name="delete">Delete</button>
+                </form>
                 {% endif %}
             </aside>
         </div>
