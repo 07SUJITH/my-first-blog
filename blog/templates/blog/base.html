@@ -11,36 +11,121 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext">
 
     <!-- Base CSS -->
-
     <link rel="stylesheet" href="{% static 'blog/css/base.css' %}">
 
     {% block page_css %}{% endblock %}
-    {% block extra_css %}
-    {% endblock %}
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
     <!-- Header -->
-    <header class="header">
+    <header class="header" id="header">
         <div class="header-content">
+            <!-- Left side - Create button (Desktop only) -->
             <div>
                 {% if user.is_authenticated %}
-                <a href="{% url 'blog:post_new' %}" class="top-menu">
+                <a href="{% url 'blog:post_new' %}" class="create-btn">
                     {% include './icons/file-earmark-plus.svg' %}
+                    <span>Create</span>
                 </a>
                 {% endif %}
             </div>
 
-            <a href="{% url 'blog:post_list' %}" class="logo" style="font-family: 'Lobster';">ModernBlog</a>
-            <nav>
+            <!-- Center - Logo -->
+            <a href="{% url 'blog:post_list' %}" class="logo" style="font-family: 'Lobster';">
+                ModernBlog
+            </a>
+
+            <!-- Right side - Desktop Navigation -->
+            <nav class="nav-desktop">
                 <ul class="nav-links" style="font-style: italic;">
                     <li><a href="{% url 'blog:post_list' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'blog:post_draft_list' %}">Drafts</a></li>
+                    {% endif %}
                     <li><a href="{% url 'blog:about' %}">About</a></li>
+                    {% if user.is_authenticated %}
+                    <li>
+                        <form method="POST" action="{% url 'accounts:logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
 
+                {% if user.is_authenticated %}
+                <div class="user-info">
+                    <div class="user-avatar">
+                        {{ user.get_full_name|default:user.username|first|upper }}
+                    </div>
+                    <span>{{ user.get_full_name|default:user.username }}</span>
+                </div>
+                {% endif %}
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <a href="{% url 'blog:post_list' %}" class="mobile-logo">
+                ModernBlog
+            </a>
+        </div>
+
+        <div class="mobile-sidebar-content">
+            {% if user.is_authenticated %}
+            <!-- User Info -->
+            <div class="mobile-user-info">
+                <div class="user-avatar">
+                    {{ user.get_full_name|default:user.username|first|upper }}
+                </div>
+                <h3>{{ user.get_full_name|default:user.username }}</h3>
+                <p>Welcome back!</p>
+            </div>
+
+            <!-- Create Button -->
+            <a href="{% url 'blog:post_new' %}" class="mobile-create-btn">
+                {% include './icons/file-earmark-plus.svg' %}
+                <span>Create Post</span>
+            </a>
+            {% endif %}
+
+            <!-- Navigation Links -->
+            <nav>
+                <ul class="mobile-nav-links">
+                    <li><a href="{% url 'blog:post_list' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'blog:post_draft_list' %}">Drafts</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'blog:about' %}">About</a></li>
+                    {% if user.is_authenticated %}
+                    <li>
+                        <form method="POST" action="{% url 'accounts:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
-    </header>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- Page-specific hero/banner section -->
     {% block hero %}
@@ -52,7 +137,7 @@
         {% endblock %}
     </main>
 
-    <!-- Footer (optional) -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <p>&copy; 2023 Modern Blog. All rights reserved.</p>
@@ -63,6 +148,113 @@
             </p>
         </div>
     </footer>
+
+    <!-- Navigation JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elements
+            const header = document.getElementById('header');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+
+            // Variables for scroll behavior
+            let lastScrollTop = 0;
+            let isScrolling = false;
+
+            // Mobile menu functions
+            function toggleMobileMenu() {
+                const isActive = mobileSidebar.classList.contains('active');
+
+                if (isActive) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            }
+
+            function openMobileMenu() {
+                mobileMenuBtn.classList.add('active');
+                mobileSidebar.classList.add('active');
+                mobileOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                mobileMenuBtn.classList.remove('active');
+                mobileSidebar.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Header hide/show on scroll
+            function handleScroll() {
+                const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                // Prevent negative scrolling issues
+                if (currentScrollTop < 0) {
+                    return;
+                }
+
+                // Hide header when scrolling down, show when scrolling up
+                if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
+                    // Scrolling down & past threshold
+                    header.classList.add('header-hidden');
+                } else if (currentScrollTop < lastScrollTop || currentScrollTop <= 100) {
+                    // Scrolling up or at top
+                    header.classList.remove('header-hidden');
+                }
+
+                lastScrollTop = currentScrollTop;
+            }
+
+            // Throttle scroll events
+            function throttleScroll() {
+                if (!isScrolling) {
+                    requestAnimationFrame(function () {
+                        handleScroll();
+                        isScrolling = false;
+                    });
+                    isScrolling = true;
+                }
+            }
+
+            // Event listeners
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            mobileOverlay.addEventListener('click', closeMobileMenu);
+
+            // Scroll event listener
+            window.addEventListener('scroll', throttleScroll, { passive: true });
+
+            // Close mobile menu on window resize
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Close mobile menu when clicking on links
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a, .mobile-nav-links button, .mobile-create-btn');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    setTimeout(closeMobileMenu, 150);
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && mobileSidebar.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Prevent body scroll when sidebar is open
+            mobileSidebar.addEventListener('touchmove', function (e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+
     <!-- Base JavaScript -->
     {% block javascript %}
     {% endblock %}
