@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Server Error</title>
+    <link rel="stylesheet" href="{% static 'errors/css/errors.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-icon">
+                <i class="fas fa-server"></i>
+            </div>
+            <div class="error-code">500</div>
+            <h1 class="error-title">Server Error</h1>
+            <p class="error-description">
+                Something went wrong on our end. Our team has been notified and
+                is working to fix the issue. Please try again in a few moments.
+            </p>
+            <div class="retry-section">
+                <button onclick="location.reload()" class="btn btn-primary">
+                    <i class="fas fa-redo"></i>
+                    Try Again
+                </button>
+                <div class="retry-timer">
+                    <span id="retry-text">Auto-retry in <span id="countdown">30</span> seconds</span>
+                </div>
+            </div>
+            <div class="error-actions">
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-home"></i>
+                    Go Home
+                </a>
+                <a href="/contact" class="btn btn-outline">
+                    <i class="fas fa-bug"></i>
+                    Report Issue
+                </a>
+            </div>
+            <div class="error-help">
+                <p>Error persists? <a href="/status">Check system status</a></p>
+            </div>
+        </div>
+        <div class="error-animation">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-retry countdown for 500 errors
+        let countdown = 30;
+        const countdownEl = document.getElementById('countdown');
+        const retryTextEl = document.getElementById('retry-text');
+
+        const timer = setInterval(() => {
+            countdown--;
+            countdownEl.textContent = countdown;
+
+            if (countdown <= 0) {
+                clearInterval(timer);
+                retryTextEl.textContent = 'Retrying...';
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        }, 1000);
+
+        // Clear timer if user manually retries
+        document.querySelector('.btn-primary').addEventListener('click', () => {
+            clearInterval(timer);
+        });
+    </script>
+</body>
+
+</html>

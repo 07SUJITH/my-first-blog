@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link rel="stylesheet" href="{% static 'errors/css/errors.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="error-code">404</div>
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-description">
+                Oops! The page you're looking for seems to have wandered off.
+                It might have been moved, deleted, or you entered the wrong URL.
+            </p>
+            <div class="search-box">
+                <form action="/search/" method="get">
+                    <div class="search-input-container">
+                        <input type="text" name="q" placeholder="Search our blog..." class="search-input">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home"></i>
+                    Go Home
+                </a>
+                <a href="/blog/" class="btn btn-secondary">
+                    <i class="fas fa-blog"></i>
+                    Browse Blog
+                </a>
+            </div>
+            <div class="error-help">
+                <p>Still can't find what you're looking for? <a href="/contact">Let us know</a></p>
+            </div>
+        </div>
+        <div class="error-animation">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
