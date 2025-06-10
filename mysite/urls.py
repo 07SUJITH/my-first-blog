@@ -17,6 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+'''
+custom handlers only kick in when DEBUG=False and Django can actually load templates.
+In development Django will always show its own debug‐style 404 when DEBUG=True.
+'''
+handler403 = 'mysite.views.custom_permission_denied_view'
+handler404 = 'mysite.views.custom_page_not_found_view'
+handler500 = 'mysite.views.custom_error_view'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')), 
