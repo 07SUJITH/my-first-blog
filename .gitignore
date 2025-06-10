@@ -1,19 +1,22 @@
-# Python
-*.pyc
-*~
-__pycache__
-
-# Env
+# Environment variables
 .env
-myvenv/
-venv/
-.venv/
-
+.env.production
 # Database
 db.sqlite3
 
-# Static folder at project root
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.venv/
+env/
+
+# Django
 /static/
+/media/
 
 # macOS
 ._*
