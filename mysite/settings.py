@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,27 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7mhrjqfg7qgk*mk(i-&#qvu+)qxaf(j2^tb$y!#m&s8!i$55!g'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-7mhrjqfg7qgk*mk(i-&#qvu+)qxaf(j2^tb$y!#m&s8!i$55!g')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-# ALLOWED_HOSTS = ['sujithts.pythonanywhere.com']
-# When DEBUG is True and ALLOWED_HOSTS is empty, the host is validated against ['localhost', '127.0.0.1', '[::1]']. This won't match our hostname on PythonAnywhere once we deploy our application so we will change the following setting:
-
-
-'''
-A list of strings representing the host/domain names that this Django site is
-allowed to serve. This setting helps to prevent HTTP Host header attacks.
-
-- In development, include local addresses:
-    * 'localhost'
-    * '127.0.0.1'
-- In production (e.g., on PythonAnywhere), you can allow all subdomains by
-  prefixing with a dot:
-    * '.pythonanywhere.com'
-'''
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com']
+# ALLOWED_HOSTS configuration
+# In production, set ALLOWED_HOSTS environment variable
+# For PythonAnywhere: ALLOWED_HOSTS=yourusername.pythonanywhere.com
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
 
 
@@ -72,7 +61,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Directory where custom templates are stored
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,7 +130,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATICFILES_DIRS = [
+    BASE_DIR / 'static_src',
+]  # directories where Django will look for static files
 
 STATIC_ROOT = BASE_DIR / 'static'  # filesystem path where `collectstatic` gathers all static files
 # In production your web server (nginx/Apache) is then pointed at that folder to serve /static/... URLs directly, without involving Django.
@@ -160,4 +151,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = Path(BASE_DIR / 'media')
 
 # so that when the login page is accessed directly, it will redirect a successful login to the top-level index (the homepage of our blog).
-LOGIN_REDIRECT_URL = '/' 
+LOGIN_REDIRECT_URL = '/'
