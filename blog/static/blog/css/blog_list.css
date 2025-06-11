@@ -266,3 +266,16 @@
     height: 36px;
   }
 }
+
+.comment-count {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.comment-count .icon {
+  font-size: 1rem;
+  opacity: 0.7;
+}
