@@ -9,7 +9,9 @@ By registering Post here, you’ll be able to:
 """
 
 from django.contrib import admin
-from .models import Post
+from .models import Post, Comment
 
 # Register the Post model so it appears in /admin/
 admin.site.register(Post)
+# Register the Comment model so it appears in /admin/
+admin.site.register(Comment)
