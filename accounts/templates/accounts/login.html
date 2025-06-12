@@ -94,8 +94,7 @@
         </form>
 
         <div class="auth-footer">
-            <!-- TODO: Add links for sign up and password recovery -->
-            <p>Don't have an account? <a href="#" class="auth-link">Sign up here</a></p>
+            <p>Don't have an account? <a href="{% url 'accounts:signup' %}" class="auth-link">Sign up here</a></p>
             <p><a href="#" class="auth-link">Forgot your password?</a></p>
         </div>
     </div>
