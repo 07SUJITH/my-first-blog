@@ -207,6 +207,27 @@
   font-size: 0.75rem;
 }
 
+/* Field Help Text */
+.field-help {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  line-height: 1.4;
+}
+
+.field-help ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.field-help li {
+  margin-bottom: 0.25rem;
+}
+
 /* Form Actions */
 .form-actions {
   margin-top: 2rem;
