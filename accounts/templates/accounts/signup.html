@@ -1,0 +1,130 @@
+{% extends "blog/base.html" %}
+
+{% load static %}
+
+{% block title %}Sign Up - Modern Blog{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/auth.css' %}">
+{% endblock %}
+
+{% block hero %}
+<section class="auth-hero">
+    <div class="auth-hero-content">
+        <h1>Join Our Community</h1>
+        <p>Create your account to start sharing your thoughts</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Create Account</h2>
+            <p>Fill in your details to get started</p>
+        </div>
+
+        {% if form.errors %}
+        <div class="error-message">
+            <div class="error-icon">⚠️</div>
+            <div class="error-text">
+                <strong>Registration Failed</strong>
+                <p>Please correct the errors below and try again.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'accounts:signup' %}" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label">
+                    {{ form.username.label }}
+                </label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    {{ form.username }}
+                </div>
+                {% if form.username.errors %}
+                <div class="field-error">
+                    {{ form.username.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}" class="form-label">
+                    {{ form.password1.label }}
+                </label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <circle cx="12" cy="16" r="1"></circle>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    {{ form.password1 }}
+                </div>
+                {% if form.password1.errors %}
+                <div class="field-error">
+                    {{ form.password1.errors.0 }}
+                </div>
+                {% endif %}
+
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}" class="form-label">
+                    {{ form.password2.label }}
+                </label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <circle cx="12" cy="16" r="1"></circle>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    {{ form.password2 }}
+                </div>
+                {% if form.password2.errors %}
+                <div class="field-error">
+                    {{ form.password2.errors.0 }}
+                </div>
+                {% endif %}
+                {% if form.password1.help_text %}
+                <div class="field-help">
+                    {{ form.password1.help_text }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <span>Create Account</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                </button>
+            </div>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{% url 'accounts:login' %}" class="auth-link">Sign in here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
