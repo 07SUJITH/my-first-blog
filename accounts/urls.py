@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-
+from . import views  # Import views from the current app
 
 # Assigns a URL namespace to this app so you can reverse namespaced URLs (e.g. 'accounts:login') without collisions.
 app_name = 'accounts' # Namespace for the accounts app
@@ -15,4 +15,8 @@ urlpatterns = [
     # otherwise it will redirect to accounts/logout.html
     # This is the default template for the logout view in Django, but you can customize it.
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    
+    
+    # Signup view - functional view for user registration
+    path('signup/', views.signup, name='signup'),
 ]
